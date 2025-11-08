@@ -9,7 +9,7 @@ export default function UserList({ users }) {
 
   function detailsActionClickHandler(userId) {
     setShowDetails(true);
-    selectedUserId(userId);
+    setSelectedUserId(userId);
   }
 
   function closeModalHandler() {
