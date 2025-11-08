@@ -53,7 +53,10 @@ function App() {
       },
       body: JSON.stringify(userData),
     })
-      .then(() => setForceRefresh((state) => !state))
+      .then(() => {
+        closeUserClickHandler();
+        setForceRefresh((state) => !state);
+      })
       .catch((err) => alert(err.message));
 
     console.log(userData);
