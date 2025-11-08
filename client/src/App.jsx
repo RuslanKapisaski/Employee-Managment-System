@@ -20,6 +20,9 @@ function App() {
     setUserModal(false);
   }
 
+  function refresh() {
+    setForceRefresh((state) => !state);
+  }
   useEffect(() => {
     fetch("http://localhost:3030/jsonstore/users")
       .then((response) => response.json())
@@ -55,7 +58,7 @@ function App() {
     })
       .then(() => {
         closeUserModalClickHandler();
-        setForceRefresh((state) => !state);
+        refresh();
       })
       .catch((err) => alert(err.message));
 
@@ -70,7 +73,7 @@ function App() {
         <section className="card users-container">
           <Search />
 
-          <UserList users={users} />
+          <UserList users={users} forceUserRefresh={refresh} />
 
           <button className="btn-add btn" onClick={showUserModalClickHandler}>
             Add new user
