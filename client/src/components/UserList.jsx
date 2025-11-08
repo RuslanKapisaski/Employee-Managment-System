@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import UserItem from "./UserItem.jsx";
 
 export default function UserList() {
@@ -118,7 +119,6 @@ export default function UserList() {
           ))}
         </tbody>
       </table>
-      <button className="btn-add btn">Add new user</button>
     </div>
   );
 }
