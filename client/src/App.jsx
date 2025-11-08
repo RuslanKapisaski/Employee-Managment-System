@@ -12,11 +12,11 @@ function App() {
   const [users, setUsers] = useState([]);
   const [forceRefresh, setForceRefresh] = useState(true);
 
-  function addUserClickHandler() {
+  function showUserModalClickHandler() {
     setUserModal(true);
   }
 
-  function closeUserClickHandler() {
+  function closeUserModalClickHandler() {
     setUserModal(false);
   }
 
@@ -29,7 +29,7 @@ function App() {
       .catch((err) => alert(err.message));
   }, [forceRefresh]);
 
-  const addUserSubmitHanlder = (event) => {
+  const showUserModalSubmitHandler = (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
@@ -54,7 +54,7 @@ function App() {
       body: JSON.stringify(userData),
     })
       .then(() => {
-        closeUserClickHandler();
+        closeUserModalClickHandler();
         setForceRefresh((state) => !state);
       })
       .catch((err) => alert(err.message));
@@ -72,7 +72,7 @@ function App() {
 
           <UserList users={users} />
 
-          <button className="btn-add btn" onClick={addUserClickHandler}>
+          <button className="btn-add btn" onClick={showUserModalClickHandler}>
             Add new user
           </button>
 
@@ -80,8 +80,8 @@ function App() {
         </section>
         {userModal && (
           <CreateUserModal
-            onClose={closeUserClickHandler}
-            onSubmit={addUserSubmitHanlder}
+            onClose={closeUserModalClickHandler}
+            onSubmit={showUserModalSubmitHandler}
           />
         )}
       </main>

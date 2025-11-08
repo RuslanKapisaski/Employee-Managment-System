@@ -1,7 +1,21 @@
+import { useState } from "react";
+
 import UserItem from "./UserItem.jsx";
+import UserDetails from "./UserDetails.jsx";
 
 export default function UserList({ users }) {
-  
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  function detailsActionClickHandler(userId) {
+    setShowDetails(true);
+    selectedUserId(userId);
+  }
+
+  function closeModalHandler() {
+    setShowDetails(false);
+  }
+
   return (
     <div className="table-wrapper">
       <table className="table">
@@ -103,10 +117,17 @@ export default function UserList({ users }) {
         </thead>
         <tbody>
           {users.map((user) => (
-            <UserItem key={user._id} {...user} />
+            <UserItem
+              {...user}
+              key={user._id}
+              onDetailsClick={detailsActionClickHandler}
+            />
           ))}
         </tbody>
       </table>
+      {showDetails && (
+        <UserDetails userId={selectedUserId} onClose={closeModalHandler} />
+      )}
     </div>
   );
 }
