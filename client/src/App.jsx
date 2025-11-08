@@ -10,6 +10,7 @@ import CreateUserModal from "./components/CreateUsermModal.jsx";
 function App() {
   const [userModal, setUserModal] = useState(false);
   const [users, setUsers] = useState([]);
+  const [forceRefresh, setForceRefresh] = useState(true);
 
   function addUserClickHandler() {
     setUserModal(true);
@@ -26,7 +27,7 @@ function App() {
         setUsers(Object.values(result));
       })
       .catch((err) => alert(err.message));
-  }, []);
+  }, [forceRefresh]);
 
   const addUserSubmitHanlder = (event) => {
     event.preventDefault();
@@ -52,10 +53,7 @@ function App() {
       },
       body: JSON.stringify(userData),
     })
-      .then((responce) => responce.json())
-      .then((result) => {
-        console.log(result);
-      })
+      .then(() => setForceRefresh((state) => !state))
       .catch((err) => alert(err.message));
 
     console.log(userData);
