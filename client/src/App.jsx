@@ -5,7 +5,7 @@ import Footer from "./components/Footer.jsx";
 import Search from "./components/Search.jsx";
 import UserList from "./components/UserList.jsx";
 import Pagination from "./components/Pagination.jsx";
-import CreateUserModal from "./components/CreateUsermModal.jsx";
+import SaveUserModal from "./components/SaveUserModal.jsx";
 
 function App() {
   const [userModal, setUserModal] = useState(false);
@@ -61,8 +61,6 @@ function App() {
         refresh();
       })
       .catch((err) => alert(err.message));
-
-    console.log(userData);
   };
 
   return (
@@ -82,7 +80,7 @@ function App() {
           <Pagination />
         </section>
         {userModal && (
-          <CreateUserModal
+          <SaveUserModal
             onClose={closeUserModalClickHandler}
             onSubmit={showUserModalSubmitHandler}
           />

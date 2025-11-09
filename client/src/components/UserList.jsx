@@ -3,11 +3,14 @@ import { useState } from "react";
 import UserItem from "./UserItem.jsx";
 import UserDetails from "./UserDetails.jsx";
 import DeleteUserModal from "./DeleteUserModal.jsx";
+import SaveUserModal from "./SaveUserModal.jsx";
 
 export default function UserList({ users, forceUserRefresh }) {
   const [showDetails, setShowDetails] = useState(false);
+  const [showUserEdit, setShowUserEdit] = useState(false);
+
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [deletedUser, setShowUserDelete] = useState(null);
+  const [showUserDelete, setShowUserDelete] = useState(null);
 
   function detailsActionClickHandler(userId) {
     setSelectedUserId(userId);
@@ -19,9 +22,48 @@ export default function UserList({ users, forceUserRefresh }) {
     setShowUserDelete(userId);
   }
 
+  function editActionHandler(userId) {
+    setSelectedUserId(userId);
+    setShowUserEdit(true);
+  }
+
   function closeModalHandler() {
     setShowDetails(false);
     setShowUserDelete(false);
+    setShowUserEdit(false);
+    setSelectedUserId(null);
+    forceUserRefresh();
+  }
+
+  async function editUserHandler(e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    const { country, city, street, streetNumber, ...userData } =
+      Object.fromEntries(formData);
+
+    userData.address = {
+      country,
+      city,
+      street,
+      streetNumber,
+    };
+
+    userData.updatedAt = new Date().toISOString();
+
+    try {
+      await fetch(`http://localhost:3030/jsonstore/users/${selectedUserId}`, {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+      closeModalHandler();
+    } catch (error) {
+      alert(error.message);
+    }
   }
 
   return (
@@ -130,19 +172,26 @@ export default function UserList({ users, forceUserRefresh }) {
               key={user._id}
               onDetailsClick={detailsActionClickHandler}
               onDeleteClick={deleteActionClickHandler}
+              onEditClick={editActionHandler}
             />
           ))}
         </tbody>
       </table>
+
       {showDetails && (
         <UserDetails userId={selectedUserId} onClose={closeModalHandler} />
       )}
 
-      {deletedUser && (
-        <DeleteUserModal
+      {showUserDelete && (
+        <DeleteUserModal userId={selectedUserId} onClose={closeModalHandler} />
+      )}
+
+      {showUserEdit && (
+        <SaveUserModal
           userId={selectedUserId}
           onClose={closeModalHandler}
-          forceUserRefresh={forceUserRefresh}
+          onSubmit={editUserHandler}
+          editMode
         />
       )}
     </div>
