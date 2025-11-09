@@ -23,6 +23,14 @@ function App() {
   function refresh() {
     setForceRefresh((state) => !state);
   }
+
+  function sortUsersHandler() {
+    setUsers((state) =>
+      [...state].sort(
+        (userA, userB) => new Date(userB.createdAt) - new Date(userA.createdAt)
+      )
+    );
+  }
   useEffect(() => {
     fetch("http://localhost:3030/jsonstore/users")
       .then((response) => response.json())
@@ -71,7 +79,11 @@ function App() {
         <section className="card users-container">
           <Search />
 
-          <UserList users={users} forceUserRefresh={refresh} />
+          <UserList
+            users={users}
+            forceUserRefresh={refresh}
+            onSort={sortUsersHandler}
+          />
 
           <button className="btn-add btn" onClick={showUserModalClickHandler}>
             Add new user
